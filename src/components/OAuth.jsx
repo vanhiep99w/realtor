@@ -1,13 +1,12 @@
-import {toast} from "react-toastify";
-import {getAuth, GoogleAuthProvider, signInWithPopup} from "firebase/auth";
-import {doc, getDoc, serverTimestamp, setDoc} from "firebase/firestore";
-import {db} from "@/firebase.js";
-import {useNavigate} from "react-router";
+import { toast } from "react-toastify";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { db } from "@/firebase.js";
+import { useNavigate } from "react-router";
 
 function OAuth(props) {
-
   const navigate = useNavigate();
-  const onGoogleClick =async () => {
+  const onGoogleClick = async () => {
     try {
       const provider = new GoogleAuthProvider();
       const auth = getAuth();
@@ -18,19 +17,30 @@ function OAuth(props) {
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
 
-      if(!docSnap.exists()){
-        await setDoc(docRef, {username: user.displayName, emailAddress: user.email, timestamp: serverTimestamp()})
+      if (!docSnap.exists()) {
+        await setDoc(docRef, {
+          username: user.displayName,
+          emailAddress: user.email,
+          timestamp: serverTimestamp()
+        });
       }
 
-      navigate("/")
+      navigate("/");
     } catch (error) {
-      console.log(error)
-      toast.error("Could not authorize with google")
+      console.log(error);
+      toast.error("Could not authorize with google");
     }
-
-  }
+  };
   return (
-    <div><button type="button" className="w-full-button bg-red-700" onClick={onGoogleClick}>Continue with Google</button></div>
+    <div>
+      <button
+        type="button"
+        className="w-full-button bg-red-700"
+        onClick={onGoogleClick}
+      >
+        Continue with Google
+      </button>
+    </div>
   );
 }
 
