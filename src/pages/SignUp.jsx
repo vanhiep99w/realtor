@@ -6,6 +6,7 @@ import {getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/a
 import {serverTimestamp, setDoc, doc} from "firebase/firestore"
 import {db} from "@/firebase.js";
 import {useNavigate} from "react-router";
+import {toast} from "react-toastify";
 
 function SignUp(props) {
   const {register, handleSubmit} = useForm();
@@ -24,7 +25,8 @@ function SignUp(props) {
       await setDoc(doc(db, "users", user.uid), userMetaData);
       navigate("/sign-in")
     } catch (error) {
-      // handler error
+      console.dir(error.message)
+      toast.error("Something went wrong with the registration", {position: "bottom-center", hideProgressBar: true})
       console.log(error)
     }
 
