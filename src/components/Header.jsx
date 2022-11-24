@@ -23,7 +23,7 @@ function Header(props) {
                 {title: "Offers", path: "/offers"},
                 {title: "Sign In", path: "/sign-in"}
               ].map(({title, path}) => (
-                <li onClick={() => navigate(path)} className={`cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px] border-b-transparent ${pathMatchRoute(path) && "text-black border-b-red-500"}`}>{title}</li>
+                <li key={path} onClick={() => navigate(path)} className={`cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px] border-b-transparent ${pathMatchRoute(path) && "text-black border-b-red-500"}`}>{title}</li>
               ))
             }
           </ul>
