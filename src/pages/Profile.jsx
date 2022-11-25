@@ -1,18 +1,50 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import { getAuth } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { getAuth, updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "@/firebase.js";
 
-function Profile(props) {
+function Profile() {
   const auth = getAuth();
   const navigate = useNavigate();
   const [editMode, setEditMode] = useState(false);
   const { register, handleSubmit } = useForm({
-    defaultValues: {}
+    defaultValues: {
+      name: auth.currentUser.displayName,
+      emailAddress: auth.currentUser.email
+    }
   });
-  const onSubmit = () => {
+
+  const onSubmit = async ({ name }) => {
     if (editMode) {
+      const user = auth.currentUser;
+      try {
+        if (user.displayName !== "name") {
+          // Update displayName in Firebase Auth
+          await updateProfile(user, { displayName: name });
+          // Update userName in Firebase Firestore
+
+          const docRef = doc(db, "users", user.uid);
+          console.log(docRef);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            await updateDoc(docRef, { userName: name });
+          }
+
+          toast.success("Update profile successfully", {
+            position: "bottom-center",
+            hideProgressBar: true
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("Could not update profile detail!", {
+          position: "bottom-center",
+          hideProgressBar: true
+        });
+      }
     }
 
     setEditMode((prevState) => !prevState);
@@ -44,7 +76,7 @@ function Profile(props) {
           <div className="flex space-x-2">
             <p>Do you want to change your name?</p>
             <button className="text-red-500">
-              {editMode ? "Edit" : "Apply change"}
+              {editMode ? "Apply change" : "Edit"}
             </button>
           </div>
           <button type="button" className="text-blue-500" onClick={onLogout}>

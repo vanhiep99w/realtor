@@ -28,13 +28,13 @@ function SignUp(props) {
       await updateProfile(user, { displayName: name });
       // store user to firestore
       const userMetaData = {
-        username: name,
+        userName: name,
         emailAddress: emailAddress,
         timestamp: serverTimestamp()
       };
       delete user.password;
       await setDoc(doc(db, "users", user.uid), userMetaData);
-      navigate("/sign-in");
+      navigate("/");
     } catch (error) {
       toast.error("Something went wrong with the registration", {
         position: "bottom-center",
