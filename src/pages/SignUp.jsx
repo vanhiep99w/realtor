@@ -33,16 +33,13 @@ function SignUp(props) {
         timestamp: serverTimestamp()
       };
       delete user.password;
-      console.log(userMetaData);
       await setDoc(doc(db, "users", user.uid), userMetaData);
       navigate("/sign-in");
     } catch (error) {
-      console.dir(error.message);
       toast.error("Something went wrong with the registration", {
         position: "bottom-center",
         hideProgressBar: true
       });
-      console.log(error);
     }
   };
 

@@ -17,8 +17,6 @@ function Header(props) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   
-  console.log(loggedIn)
-
   const pathMatchRoute = (route) => {
     return route === pathname ? true : "";
   };

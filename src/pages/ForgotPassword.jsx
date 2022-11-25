@@ -15,7 +15,6 @@ function ForgotPassword(props) {
         hideProgressBar: true
       });
     } catch (error) {
-      console.log(error);
       toast.error("Could not find the email address!", {
         position: "bottom-center",
         hideProgressBar: true

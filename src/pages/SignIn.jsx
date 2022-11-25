@@ -17,13 +17,11 @@ function SignIn(props) {
         emailAddress,
         password
       );
-      console.log(userCredential);
       if (userCredential.user) {
         return navigate("/");
       }
       throw Error("Login failed");
     } catch (error) {
-      console.log(error);
       toast.error("Login failed! Please try again later!", {
         hideProgressBar: true,
         position: "bottom-center"
