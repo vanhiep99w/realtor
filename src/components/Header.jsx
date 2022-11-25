@@ -1,9 +1,23 @@
 import Logo from "@/assets/logo.svg";
 import { useLocation, useNavigate } from "react-router";
+import useAuthStatus from "@/hooks/useAuthStatus.js";
+
+const getNavItems = (loggedIn) => {
+  return [
+    { title: "Home", path: "/" },
+    { title: "Offers", path: "/offers" },
+    loggedIn
+      ? { title: "Profile", path: "/profile" }
+      : { title: "Sign In", path: "/sign-in" }
+  ];
+};
 
 function Header(props) {
+  const { loggedIn, checkingStatus } = useAuthStatus();
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  
+  console.log(loggedIn)
 
   const pathMatchRoute = (route) => {
     return route === pathname ? true : "";
@@ -22,11 +36,7 @@ function Header(props) {
         </div>
         <div>
           <ul className="flex items-center space-x-10">
-            {[
-              { title: "Home", path: "/" },
-              { title: "Offers", path: "/offers" },
-              { title: "Sign In", path: "/sign-in" }
-            ].map(({ title, path }) => (
+            {getNavItems(loggedIn).map(({ title, path }) => (
               <li
                 key={path}
                 onClick={() => navigate(path)}
