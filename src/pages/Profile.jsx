@@ -5,6 +5,8 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase.js";
+import { FcHome } from "react-icons/all";
+import {Link} from "react-router-dom";
 
 function Profile() {
   const auth = getAuth();
@@ -83,9 +85,14 @@ function Profile() {
             Sign out
           </button>
         </div>
-        <button className="w-full-button uppercase bg-blue-600 font-medium text-sm">
-          Sell or rent your home
-        </button>
+        <Link
+          to="/create-listing"
+          className="w-full-button uppercase bg-blue-600 font-medium text-sm flex items-center justify-center space-x-2"
+          type="button"
+        >
+          <FcHome className="text-2xl"/>
+          <span>Sell or rent your home</span>
+        </Link>
       </form>
     </section>
   );
