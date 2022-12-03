@@ -16,3 +16,7 @@ body{
   background-color: theme("colors[light-blue]");
 }
 
+.spinner-active{
+  overflow: hidden;
+}
+
