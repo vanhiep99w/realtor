@@ -4,14 +4,13 @@ import FieldWrapper from "@/components/FieldWrapper.jsx";
 import { toast } from "react-toastify";
 import { getKey } from "@/helpers/index.js";
 import { GOOGLE_API } from "@/constants/index.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { getAuth } from "firebase/auth";
-import {addDoc, collection } from "firebase/firestore"
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import _ from "lodash";
-import { serverTimestamp } from "firebase/firestore";
-import {db} from "@/firebase.js";
-import {useState} from "react";
+import { db } from "@/firebase.js";
 import Spinner from "@/components/Spinner.jsx";
+import { useNavigate } from "react-router";
 
 function CreateListing() {
   const {
@@ -39,6 +38,9 @@ function CreateListing() {
     shouldUseNativeValidation: true
   });
 
+  const auth = getAuth();
+  const navigate = useNavigate();
+  const userId = auth.currentUser.uid;
   const [type, parkingSpot, furnished, offer] = watch([
     "type",
     "parkingSpot",
@@ -69,19 +71,17 @@ function CreateListing() {
       throw new Error("Could not found your address!");
     }
 
-    const { lat = 0, lng = 0 } = _.get(results, "[0].geometry.location", {});
-
-    return { lat, lng };
+    return _.get(results, "[0].geometry.location", {});
   };
 
   const uploadImages = async (images) => {
     const uploadImage = async (image) => {
       return new Promise(async (rel, rej) => {
         const storage = getStorage();
-        const auth = getAuth();
+
         const imageRef = ref(
           storage,
-          `${auth.currentUser.uid}-${image.name}-${new Date().getTime()}`
+          `${userId}-${image.name}-${new Date().getTime()}`
         );
         try {
           const result = await uploadBytes(imageRef, image);
@@ -103,13 +103,12 @@ function CreateListing() {
 
   const storeData = async (data) => {
     try {
-      const docRef = await addDoc(collection(db, "listings"), data)
+      const docRef = await addDoc(collection(db, "listings"), data);
     } catch (error) {
-      console.log(error)
-      throw new Error("Can not create listing!")
+      console.log(error);
+      throw new Error("Can not create listing!");
     }
-
-  }
+  };
 
   const onSubmit = async (data) => {
     const { price, discount, images, offer, address, ...otherData } = data;
@@ -119,7 +118,6 @@ function CreateListing() {
 
       const geoLocation = await getGeoLocation(address);
 
-
       const imgUrls = await uploadImages(images);
 
       const formData = {
@@ -128,21 +126,22 @@ function CreateListing() {
         imgUrls,
         geoLocation,
         price,
-        timestamp: serverTimestamp()
+        timestamp: serverTimestamp(),
+        userRef: userId
       };
 
       if (offer) {
         formData.discount = discount;
       }
 
-      const docRef = await storeData(formData)
+      await storeData(formData);
 
       toast.success("Submit success", {
         hideProgressBar: true,
-        position: "bottom-center",
+        position: "bottom-center"
       });
 
-      console.log(formData);
+      navigate("/profile");
     } catch (error) {
       toast.error(error.message, {
         hideProgressBar: true,
@@ -333,7 +332,7 @@ function CreateListing() {
         </form>
       </div>
 
-      <Spinner isShow={isSubmitting}/>
+      <Spinner isShow={isSubmitting} />
     </section>
   );
 }

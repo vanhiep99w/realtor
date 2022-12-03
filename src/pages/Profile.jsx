@@ -3,15 +3,27 @@ import { useEffect, useState } from "react";
 import { getAuth, updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  updateDoc,
+  where
+} from "firebase/firestore";
 import { db } from "@/firebase.js";
 import { FcHome } from "react-icons/all";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import ListingItem from "@/components/ListingItem.jsx";
 
 function Profile() {
   const auth = getAuth();
   const navigate = useNavigate();
   const [editMode, setEditMode] = useState(false);
+  const [listings, setListings] = useState([]);
+  const [isLoadingListings, setIsLoadingListing] = useState(false);
   const { register, handleSubmit } = useForm({
     defaultValues: {
       name: auth.currentUser.displayName,
@@ -52,6 +64,34 @@ function Profile() {
     setEditMode((prevState) => !prevState);
   };
 
+  const fetchListings = async () => {
+    const listingsRef = collection(db, "listings");
+
+    const queryRef = query(
+      listingsRef,
+      where("userRef", "==", auth.currentUser.uid),
+      orderBy("timestamp", "desc")
+    );
+
+    const listingsSnap = await getDocs(queryRef);
+
+    setListings(
+      listingsSnap.docs.map((docSnap) => ({
+        id: docSnap.id,
+        ...docSnap.data()
+      }))
+    );
+
+    setIsLoadingListing(false);
+  };
+
+  useEffect(() => {
+    setIsLoadingListing(true);
+    fetchListings();
+  }, []);
+
+  console.log(listings);
+
   const onLogout = async () => {
     await auth.signOut();
     navigate("/");
@@ -90,10 +130,21 @@ function Profile() {
           className="w-full-button uppercase bg-blue-600 font-medium text-sm flex items-center justify-center space-x-2"
           type="button"
         >
-          <FcHome className="text-2xl"/>
+          <FcHome className="text-2xl" />
           <span>Sell or rent your home</span>
         </Link>
       </form>
+
+      <div className="max-w-6xl px-3 mt-6 mx-auto">
+        {isLoadingListings || listings.length === 0 || (
+          <>
+            <h2 className="text-center font-bold text-2xl">My Listings</h2>
+            {listings.map((item) => (
+              <ListingItem item={item} key={item.id} />
+            ))}
+          </>
+        )}
+      </div>
     </section>
   );
 }

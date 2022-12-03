@@ -5,7 +5,7 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Listings
+    // ListingItem
     match /listings/{listing} {
     	allow read;
       allow create: if request.auth != null && request.resource.data.imgUrls.size() < 7;
