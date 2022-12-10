@@ -3,6 +3,7 @@ import {
   addDoc,
   collection,
   doc,
+  getDoc,
   serverTimestamp,
   updateDoc
 } from "firebase/firestore";
@@ -15,6 +16,20 @@ const validate = (price, discount, odlImages, newImages) => {
   }
   if (odlImages.length + newImages.length > 6) {
     throw new Error("Maximum 6 images is allowed");
+  }
+};
+
+export const fetchListingItem = async (listingId) => {
+  const docRef = doc(db, "listings", listingId);
+  try {
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return docSnap.data();
+    }
+    throw new Error("Not found listing item");
+  } catch (error) {
+    throw new Error("Not found listing item");
   }
 };
 

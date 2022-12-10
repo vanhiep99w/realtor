@@ -1,10 +1,12 @@
 import FormListing from "@/components/FormListing.jsx";
 import { useEffect, useState } from "react";
 import Spinner from "@/components/Spinner.jsx";
-import { doc, getDoc } from "firebase/firestore";
 import { useNavigate, useParams } from "react-router";
-import { db } from "@/firebase.js";
-import { getGeoLocationDetail, saveListing } from "@/helpers/index.js";
+import {
+  fetchListingItem,
+  getGeoLocationDetail,
+  saveListing
+} from "@/helpers/index.js";
 import { getAuth } from "firebase/auth";
 import { toast } from "react-toastify";
 
@@ -24,30 +26,29 @@ function EditListing(props) {
     } catch (error) {
       // handler error
     }
-
     return {
       ...docData,
       address: location
     };
   };
 
-  const fetchListingItem = async () => {
-    const docRef = doc(db, "listings", listingId);
+  const fetchListing = async () => {
     try {
-      const docSnap = await getDoc(docRef);
+      const listingData = await fetchListingItem(listingId);
       setIsShowLoading(false);
-      if (docSnap.exists()) {
-        return setListingItem(await convertDataItem(docSnap.data()));
+      if (listingData) {
+        setListingItem(listingData);
       }
       navigate("/profile");
     } catch (error) {
+      setIsShowLoading(false);
       navigate("/profile");
     }
   };
 
   useEffect(() => {
     setIsShowLoading(true);
-    fetchListingItem();
+    fetchListing();
   }, []);
 
   useEffect(() => {
@@ -58,7 +59,6 @@ function EditListing(props) {
 
   const onEditListing = async (data) => {
     setIsShowLoading(true);
-
     try {
       await saveListing(data, userId, listingId);
       toast.success("Successfully edit Listing item", {

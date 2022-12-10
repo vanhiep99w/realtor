@@ -14,15 +14,12 @@ function CreateListing() {
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
-
     try {
       await saveListing(data, userId);
-
       toast.success("Submit success", {
         hideProgressBar: true,
         position: "bottom-center"
       });
-
       setIsSubmitting(false);
       navigate("/profile");
     } catch (error) {

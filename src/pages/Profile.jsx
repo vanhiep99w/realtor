@@ -40,35 +40,30 @@ function Profile() {
         if (user.displayName !== "name") {
           // Update displayName in Firebase Auth
           await updateProfile(user, { displayName: name });
-          // Update userName in Firebase Firestore
 
+          // Update userName in Firebase Firestore
           const docRef = doc(db, "users", user.uid);
-          console.log(docRef);
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             await updateDoc(docRef, { userName: name });
           }
-
           toast.success("Update profile successfully", {
             position: "bottom-center",
             hideProgressBar: true
           });
         }
       } catch (error) {
-        console.log(error);
         toast.error("Could not update profile detail!", {
           position: "bottom-center",
           hideProgressBar: true
         });
       }
     }
-
     setEditMode((prevState) => !prevState);
   };
 
   const fetchListings = async () => {
     const listingsRef = collection(db, "listings");
-
     const queryRef = query(
       listingsRef,
       where("userRef", "==", auth.currentUser.uid),
@@ -77,16 +72,13 @@ function Profile() {
 
     try {
       const { docs: listingDocs } = await getDocs(queryRef);
-
       const listings = listingDocs.map((docSnap) => ({
         id: docSnap.id,
         ...docSnap.data()
       }));
-
       const locationNames = await Promise.all(
         listings.map((item) => getGeoLocationDetail(item.geoLocation))
       );
-
       setListings(
         listings.map((item, index) => ({
           ...item,
@@ -96,7 +88,6 @@ function Profile() {
     } catch (error) {
       toast.error("Failed to fetch listings!");
     }
-
     setIsLoadingListing(false);
   };
 
