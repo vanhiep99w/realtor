@@ -12,26 +12,42 @@ import PrivateRoute from "@/components/PrivateRoute.jsx";
 import CreateListing from "@/pages/CreateListing.jsx";
 import EditListing from "@/pages/EditListing.jsx";
 
+const PUBLIC_ROUTES = [
+  { path: "/", element: <Home /> },
+  { path: "/sign-in", element: <SignIn /> },
+  { path: "/sign-up", element: <SignUp /> },
+  { path: "/forgot-password", element: <ForgotPassword /> },
+  { path: "/offers", element: <Offers /> }
+];
+
+const PRIVATE_ROUTES = [
+  { rootPath: "/profile", children: [{ path: "", element: <Profile /> }] },
+  {
+    rootPath: "/create-listing",
+    children: [{ path: "", element: <CreateListing /> }]
+  },
+  {
+    rootPath: "/edit-listing",
+    children: [{ path: ":listingId", element: <EditListing /> }]
+  }
+];
+
 function App() {
   return (
     <>
       <Router>
         <Header />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<PrivateRoute />}>
-            <Route path="" element={<Profile />} />
-          </Route>
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/offers" element={<Offers />} />
-          <Route path="/create-listing" element={<PrivateRoute />}>
-            <Route path="" element={<CreateListing />} />
-          </Route>
-          <Route path="/edit-listing" element={<PrivateRoute />}>
-            <Route path=":listingId" element={<EditListing />} />
-          </Route>
+          {PUBLIC_ROUTES.map(({ path, element }) => (
+            <Route path={path} element={element} key={path} />
+          ))}
+          {PRIVATE_ROUTES.map(({ rootPath, children }) => (
+            <Route path={rootPath} element={<PrivateRoute />} key={rootPath}>
+              {children.map(({ path, element }) => (
+                <Route path={path} element={element} key={path} />
+              ))}
+            </Route>
+          ))}
         </Routes>
       </Router>
       <ToastContainer />

@@ -1,6 +1,4 @@
-
-    // Firestore rules
-
+// Firestore rules
 
 rules_version = '2';
 service cloud.firestore {
@@ -22,9 +20,7 @@ service cloud.firestore {
   }
 }
 
-
-    // Storage rules
-
+// Storage rules
 
 rules_version = '2';
 service firebase.storage {
@@ -38,9 +34,3 @@ service firebase.storage {
     }
   }
 }
-
-
-
-
-
-
