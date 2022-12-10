@@ -18,8 +18,7 @@ import { db } from "@/firebase.js";
 import { FcHome } from "react-icons/all";
 import { Link } from "react-router-dom";
 import ListingItem from "@/components/ListingItem.jsx";
-import { GOOGLE_API } from "@/constants/index.js";
-import { getKey } from "@/helpers/index.js";
+import { getGeoLocationDetail } from "@/helpers/index.js";
 
 function Profile() {
   const auth = getAuth();
@@ -67,18 +66,6 @@ function Profile() {
     setEditMode((prevState) => !prevState);
   };
 
-  const getGeoLocationDetail = async ({ lat, lng }) => {
-    const response = await fetch(
-      `${GOOGLE_API}maps/api/geocode/json?latlng=${lat},${lng}&result_type=street_address&key=${getKey(
-        "VITE_REACT_APP_GOOGLE_CONSOLE_API_KEY"
-      )}`
-    );
-
-    const { results } = await response.json();
-
-    return results[0]["formatted_address"];
-  };
-
   const fetchListings = async () => {
     const listingsRef = collection(db, "listings");
 
@@ -124,19 +111,19 @@ function Profile() {
   };
 
   const onDeleteItem = async (itemId) => {
-    if(window.confirm("Are you sure you want to delete this item?")){
+    if (window.confirm("Are you sure you want to delete this item?")) {
       await deleteDoc(doc(db, "listings", itemId));
-      setListings(listings.filter(ele => ele.id !== itemId))
+      setListings(listings.filter((ele) => ele.id !== itemId));
       toast.success("Successfully delete item", {
         position: "bottom-center"
-      })
+      });
     }
-  }
+  };
 
   const onEditItem = (itemId) => {
     navigate(`/edit-listing/${itemId}`);
-  }
-  
+  };
+
   return (
     <section>
       <h1 className="text-3xl text-center mt-6 font-bold mb-5">My Profile</h1>
@@ -182,7 +169,12 @@ function Profile() {
             <h2 className="text-center font-bold text-2xl">My Listings</h2>
             <div className="grid xl:grid-cols-5 gap-4 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
               {listings.map((item) => (
-                <ListingItem item={item} key={item.id} onDelete={onDeleteItem} onEdit={onEditItem}/>
+                <ListingItem
+                  item={item}
+                  key={item.id}
+                  onDelete={onDeleteItem}
+                  onEdit={onEditItem}
+                />
               ))}
             </div>
           </>
