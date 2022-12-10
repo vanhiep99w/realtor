@@ -9,7 +9,7 @@ function ListingItem({ item, onEdit, onDelete }) {
 
   return (
     <div className="relative rounded-lg overflow-hidden shadow-lg">
-      <Link to="/">
+      <Link to={`/category/${type}/${id}`}>
         <div>
           <img
             src={imgUrls[0]}

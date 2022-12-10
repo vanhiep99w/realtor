@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "@/components/PrivateRoute.jsx";
 import CreateListing from "@/pages/CreateListing.jsx";
 import EditListing from "@/pages/EditListing.jsx";
+import ListingDetail from "@/pages/ListingDetail.jsx";
 
 const PUBLIC_ROUTES = [
   { path: "/", element: <Home /> },
@@ -22,6 +23,10 @@ const PUBLIC_ROUTES = [
 
 const PRIVATE_ROUTES = [
   { rootPath: "/profile", children: [{ path: "", element: <Profile /> }] },
+  {
+    rootPath: "/category",
+    children: [{ path: ":category/:listingId", element: <ListingDetail /> }]
+  },
   {
     rootPath: "/create-listing",
     children: [{ path: "", element: <CreateListing /> }]
