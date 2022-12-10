@@ -10,15 +10,9 @@ function ForgotPassword(props) {
     try {
       const auth = getAuth();
       await sendPasswordResetEmail(auth, emailAddress);
-      toast.success("Email was sent. Please check your email", {
-        position: "bottom-center",
-        hideProgressBar: true
-      });
+      toast.success("Email was sent. Please check your email");
     } catch (error) {
-      toast.error("Could not find the email address!", {
-        position: "bottom-center",
-        hideProgressBar: true
-      });
+      toast.error("Could not find the email address!");
     }
   };
   return (

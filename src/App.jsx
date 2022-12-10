@@ -55,7 +55,11 @@ function App() {
           ))}
         </Routes>
       </Router>
-      <ToastContainer />
+      <ToastContainer
+        position="bottom-center"
+        hideProgressBar
+        pauseOnHover={false}
+      />
     </>
   );
 }

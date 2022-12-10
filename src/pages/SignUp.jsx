@@ -36,10 +36,7 @@ function SignUp(props) {
       await setDoc(doc(db, "users", user.uid), userMetaData);
       navigate("/");
     } catch (error) {
-      toast.error("Something went wrong with the registration", {
-        position: "bottom-center",
-        hideProgressBar: true
-      });
+      toast.error("Something went wrong with the registration");
     }
   };
 

@@ -61,12 +61,10 @@ function EditListing(props) {
     setIsShowLoading(true);
     try {
       await saveListing(data, userId, listingId);
-      toast.success("Successfully edit Listing item", {
-        position: "bottom-center"
-      });
+      toast.success("Successfully edit Listing item");
       navigate("/profile");
     } catch (error) {
-      toast.error("Can't to edit Listing item", { position: "bottom-center" });
+      toast.error("Can't to edit Listing item");
     }
     setIsShowLoading(false);
   };

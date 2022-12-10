@@ -47,16 +47,10 @@ function Profile() {
           if (docSnap.exists()) {
             await updateDoc(docRef, { userName: name });
           }
-          toast.success("Update profile successfully", {
-            position: "bottom-center",
-            hideProgressBar: true
-          });
+          toast.success("Update profile successfully");
         }
       } catch (error) {
-        toast.error("Could not update profile detail!", {
-          position: "bottom-center",
-          hideProgressBar: true
-        });
+        toast.error("Could not update profile detail!");
       }
     }
     setEditMode((prevState) => !prevState);
@@ -105,9 +99,7 @@ function Profile() {
     if (window.confirm("Are you sure you want to delete this item?")) {
       await deleteDoc(doc(db, "listings", itemId));
       setListings(listings.filter((ele) => ele.id !== itemId));
-      toast.success("Successfully delete item", {
-        position: "bottom-center"
-      });
+      toast.success("Successfully delete item");
     }
   };
 

@@ -18,7 +18,7 @@ function ListingDetail(props) {
       const listingData = await fetchListingItem(listingId);
       setListing(listingData);
     } catch (error) {
-      toast.error("Can not found the listing", { position: "bottom-center" });
+      toast.error("Can not found the listing");
     }
     setLoadingListing(false);
   };

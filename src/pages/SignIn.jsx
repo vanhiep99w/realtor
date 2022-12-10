@@ -22,10 +22,7 @@ function SignIn(props) {
       }
       throw Error("Login failed");
     } catch (error) {
-      toast.error("Login failed! Please try again later!", {
-        hideProgressBar: true,
-        position: "bottom-center"
-      });
+      toast.error("Login failed! Please try again later!");
     }
   };
   return (

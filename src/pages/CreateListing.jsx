@@ -16,17 +16,12 @@ function CreateListing() {
     setIsSubmitting(true);
     try {
       await saveListing(data, userId);
-      toast.success("Submit success", {
-        hideProgressBar: true,
-        position: "bottom-center"
-      });
+      toast.success("Submit success");
       setIsSubmitting(false);
       navigate("/profile");
     } catch (error) {
       setIsSubmitting(false);
       toast.error(error.message, {
-        hideProgressBar: true,
-        position: "bottom-center",
         toastId: error.message
       });
     }
