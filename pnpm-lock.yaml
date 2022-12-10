@@ -8,7 +8,6 @@ specifiers:
   date-fns: ^2.29.3
   firebase: ^9.14.0
   lodash: ^4.17.21
-  pluralize: ^8.0.0
   postcss: ^8.4.19
   react: ^18.2.0
   react-dom: ^18.2.0
@@ -26,7 +25,6 @@ dependencies:
   date-fns: 2.29.3
   firebase: 9.14.0
   lodash: 4.17.21
-  pluralize: 8.0.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-hook-form: 7.39.5_react@18.2.0
@@ -1834,11 +1832,6 @@ packages:
     resolution: {integrity: sha512-8V9+HQPupnaXMA23c5hvl69zXvTwTzyAYasnkb0Tts4XvO4CliqONMOnvlq26rkhLC3nWDFBJf73LU1e1VZLaQ==}
     engines: {node: '>= 6'}
     dev: true
-
-  /pluralize/8.0.0:
-    resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
-    engines: {node: '>=4'}
-    dev: false
 
   /postcss-import/14.1.0_postcss@8.4.19:
     resolution: {integrity: sha512-flwI+Vgm4SElObFVPpTIT7SU7R3qk2L7PyduMcokiaVKuWv9d/U+Gm/QAd8NDLuykTWTkcrjOeD2Pp1rMeBTGw==}

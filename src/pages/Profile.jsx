@@ -11,7 +11,8 @@ import {
   orderBy,
   query,
   updateDoc,
-  where
+  where,
+  deleteDoc
 } from "firebase/firestore";
 import { db } from "@/firebase.js";
 import { FcHome } from "react-icons/all";
@@ -121,8 +122,21 @@ function Profile() {
     await auth.signOut();
     navigate("/");
   };
+
+  const onDeleteItem = async (itemId) => {
+    if(window.confirm("Are you sure you want to delete this item?")){
+      await deleteDoc(doc(db, "listings", itemId));
+      setListings(listings.filter(ele => ele.id !== itemId))
+      toast.success("Successfully delete item", {
+        position: "bottom-center"
+      })
+    }
+  }
+
+  const onEditItem = (itemId) => {
+    navigate(`/edit-listing/${itemId}`);
+  }
   
-  console.log(listings)
   return (
     <section>
       <h1 className="text-3xl text-center mt-6 font-bold mb-5">My Profile</h1>
@@ -166,9 +180,9 @@ function Profile() {
         {isLoadingListings || listings.length === 0 || (
           <>
             <h2 className="text-center font-bold text-2xl">My Listings</h2>
-            <div className="grid xl:grid-cols-5 gap-4 lg:grid-cols-4 md:grid-cols-3 grid-cols-2">
+            <div className="grid xl:grid-cols-5 gap-4 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
               {listings.map((item) => (
-                <ListingItem item={item} key={item.id} />
+                <ListingItem item={item} key={item.id} onDelete={onDeleteItem} onEdit={onEditItem}/>
               ))}
             </div>
           </>
