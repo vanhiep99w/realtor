@@ -6,3 +6,5 @@
 + Firebase web, Firestore, Store, Authentication
 + Vite, pnpm
 + [Convention Commits](https://www.conventionalcommits.org/en/v1.0.0/) 
+# Note
++ Create a add the GOOGLE_CONSOLE_APP key with name `VITE_REACT_APP_GOOGLE_CONSOLE_API_KE` to .env file (enable Geocoding API).
