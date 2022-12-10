@@ -17,6 +17,8 @@ import { db } from "@/firebase.js";
 import { FcHome } from "react-icons/all";
 import { Link } from "react-router-dom";
 import ListingItem from "@/components/ListingItem.jsx";
+import { GOOGLE_API } from "@/constants/index.js";
+import { getKey } from "@/helpers/index.js";
 
 function Profile() {
   const auth = getAuth();
@@ -64,6 +66,18 @@ function Profile() {
     setEditMode((prevState) => !prevState);
   };
 
+  const getGeoLocationDetail = async ({ lat, lng }) => {
+    const response = await fetch(
+      `${GOOGLE_API}maps/api/geocode/json?latlng=${lat},${lng}&result_type=street_address&key=${getKey(
+        "VITE_REACT_APP_GOOGLE_CONSOLE_API_KEY"
+      )}`
+    );
+
+    const { results } = await response.json();
+
+    return results[0]["formatted_address"];
+  };
+
   const fetchListings = async () => {
     const listingsRef = collection(db, "listings");
 
@@ -73,14 +87,27 @@ function Profile() {
       orderBy("timestamp", "desc")
     );
 
-    const listingsSnap = await getDocs(queryRef);
+    try {
+      const { docs: listingDocs } = await getDocs(queryRef);
 
-    setListings(
-      listingsSnap.docs.map((docSnap) => ({
+      const listings = listingDocs.map((docSnap) => ({
         id: docSnap.id,
         ...docSnap.data()
-      }))
-    );
+      }));
+
+      const locationNames = await Promise.all(
+        listings.map((item) => getGeoLocationDetail(item.geoLocation))
+      );
+
+      setListings(
+        listings.map((item, index) => ({
+          ...item,
+          location: locationNames[index]
+        }))
+      );
+    } catch (error) {
+      toast.error("Failed to fetch listings!");
+    }
 
     setIsLoadingListing(false);
   };
@@ -90,12 +117,12 @@ function Profile() {
     fetchListings();
   }, []);
 
-  console.log(listings);
-
   const onLogout = async () => {
     await auth.signOut();
     navigate("/");
   };
+  
+  console.log(listings)
   return (
     <section>
       <h1 className="text-3xl text-center mt-6 font-bold mb-5">My Profile</h1>
@@ -139,9 +166,11 @@ function Profile() {
         {isLoadingListings || listings.length === 0 || (
           <>
             <h2 className="text-center font-bold text-2xl">My Listings</h2>
-            {listings.map((item) => (
-              <ListingItem item={item} key={item.id} />
-            ))}
+            <div className="grid xl:grid-cols-5 gap-4 lg:grid-cols-4 md:grid-cols-3 grid-cols-2">
+              {listings.map((item) => (
+                <ListingItem item={item} key={item.id} />
+              ))}
+            </div>
           </>
         )}
       </div>

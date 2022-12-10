@@ -5,7 +5,7 @@ import Spinner from "@/components/Spinner.jsx";
 function PrivateRoute(props) {
   const { loggedIn, checkingStatus } = useAuthStatus();
   if (checkingStatus) {
-    return <Spinner />;
+    return <Spinner/>;
   }
   return loggedIn ? <Outlet /> : <Navigate to="/sign-in" />;
 }

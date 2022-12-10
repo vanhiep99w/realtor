@@ -332,7 +332,7 @@ function CreateListing() {
         </form>
       </div>
 
-      <Spinner isShow={isSubmitting} />
+      {isSubmitting && <Spinner />}
     </section>
   );
 }
