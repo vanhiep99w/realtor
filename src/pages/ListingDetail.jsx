@@ -7,17 +7,18 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade, Navigation, Pagination } from "swiper";
 import "swiper/css/bundle";
 import { FaShare } from "react-icons/all";
+import ListingItemDetail from "@/components/ListingItemDetail.jsx";
 
 function ListingDetail(props) {
   const { listingId = 0 } = useParams();
   const [loadingListing, setLoadingListing] = useState(false);
-  const [listing, setListing] = useState(null);
+  const [listingItem, setListingItem] = useState(null);
 
   const fetchListing = async () => {
     setLoadingListing(true);
     try {
       const listingData = await fetchListingItem(listingId);
-      setListing(listingData);
+      setListingItem(listingData);
     } catch (error) {
       toast.error("Can not found the listing");
     }
@@ -44,7 +45,7 @@ function ListingDetail(props) {
           effect="fade"
           autoplay={{ delay: 3000 }}
         >
-          {listing?.imgUrls?.map((url, index) => (
+          {listingItem?.imgUrls?.map((url, index) => (
             <SwiperSlide key={url}>
               <div
                 className="w-full overflow-hidden h-[400px]"
@@ -60,6 +61,7 @@ function ListingDetail(props) {
           <FaShare />
         </div>
       </div>
+      <ListingItemDetail listingItem={listingItem}/>
 
       {loadingListing && <Spinner />}
     </div>
