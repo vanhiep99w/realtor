@@ -11,7 +11,7 @@ const useAuthStatus = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setLoggedIn(true);
-      }else{
+      } else {
         setLoggedIn(false);
       }
       setCheckingStatus(false);

@@ -5,7 +5,7 @@ import {
   doc,
   getDoc,
   serverTimestamp,
-  updateDoc
+  updateDoc,
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { db } from "@/firebase.js";

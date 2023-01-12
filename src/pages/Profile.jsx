@@ -12,7 +12,7 @@ import {
   query,
   updateDoc,
   where,
-  deleteDoc
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "@/firebase.js";
 import { FcHome } from "react-icons/all";

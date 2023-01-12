@@ -18,6 +18,7 @@ function ListingDetail(props) {
     setLoadingListing(true);
     try {
       const listingData = await fetchListingItem(listingId);
+      console.log(listingData);
       setListingItem(listingData);
     } catch (error) {
       toast.error("Can not found the listing");
@@ -61,7 +62,7 @@ function ListingDetail(props) {
           <FaShare />
         </div>
       </div>
-      <ListingItemDetail listingItem={listingItem}/>
+      {listingItem && <ListingItemDetail listingItem={listingItem} />}
 
       {loadingListing && <Spinner />}
     </div>
